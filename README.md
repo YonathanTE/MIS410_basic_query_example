@@ -1,10 +1,12 @@
-# Query 
-This query was written in SQL Server 2014. The goal is to retrieve all information from the Product table under the contingency that they were introduced within the previous year.
+# Basic Query 
+This query was written in SQL Server 2014. The goal was to retrieve products from the UPC_CODE table that met the guidelines. 
 
 ## Guidelines
-Complete the SQL query to retrieve all Product information for products that were introduced within the last year and with:
-- modelNum starting with 9 and ending with 3
-- prodName includes smart 
+Complete the SQL query to retrieve information on products that have:
+- unitPrice of at least $10 but no more than $50
+- minimum of $10000 of total sales (sale amount for a product in each order is calculated as: (qtyOrdered * unitPrice) - [discount$])
+- in at least 500 orders
+- ordered by at least 300 customers (each customer is uniquely associated with AcctNum)
 
 
 ### Entity Relationship Diagram
