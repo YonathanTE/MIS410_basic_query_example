@@ -1,8 +1,16 @@
-		SELECT PRODUCT.*
+	SELECT OI.UPC_CODE
+			, ((OI.qtyOrdered * OI.unitPrice) - OI.[discount$]) AS [Ttl Sales]
 
-		FROM PRODUCT
-		-- Range of time for the date introduced of the product between the current day and going back one year. 
-		WHERE PRODUCT.dateIntroduced = BETWEEN GETDATE() AND DATEADD(yy, -1, PRODUCT.dateIntroduced) 
-				AND PRODUCT.modelNum LIKE '9%3' -- Condition 1: To have the modelNum start with a 9 and end with a 3.
-				AND PRODUCT.prodName LIKE '%smart%' -- Condition 2: To include, interpreted as being in between, the word smart.
+	FROM ORDEREDITEMS OI JOIN [ORDER] O
+		ON OI.orderNumber = O.orderNumber
+	-- Guideline to keep the range of the price between $10 through $50
+	WHERE OI.unitPrice BETWEEN 10 AND 50
+
+	GROUP BY OI.UPC_CODE
+	-- Guideline to have a minimum of $10000 worth of total sales
+	HAVING SUM([Ttl Sales]) >= 10000
+	-- Guideline to at least have 500 orders for the product
+			AND SUM(OI.orderNumber) >= 500 
+			-- Guideline to have the product ordered by at least 300 customers
+			AND COUNT(DISTINCT O.AcctNum) >= 300 
 ;
